@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.data.r2dbc.config.AbstractR2dbcConfiguration
 import com.b1nd.dauthserver.domain.framework.support.FrameworkTypeReadingConverter
 import com.b1nd.dauthserver.domain.framework.support.FrameworkTypeWritingConverter
+import com.b1nd.dauthserver.domain.user.support.UserScopeTypeReadingConverter
+import com.b1nd.dauthserver.domain.user.support.UserScopeTypeWritingConverter
 import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories
 
 @Configuration
@@ -16,6 +18,6 @@ class R2dbcConfig(
 
     override fun getCustomConverters() = listOf(
         FrameworkTypeWritingConverter(), FrameworkTypeReadingConverter(),
-
+        UserScopeTypeWritingConverter(), UserScopeTypeReadingConverter()
     )
 }

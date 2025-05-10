@@ -8,7 +8,7 @@ data class ApplicationEntity(
     @Id
     val id: Long? = null,
     val name: String,
-    val dodamId: String,
+    val ownerId: String,
     val clientId: String,
     val clientSecret: String,
     val url: String,

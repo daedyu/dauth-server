@@ -27,6 +27,15 @@ dependencies {
     implementation("io.asyncer:r2dbc-mysql:1.4.1")
     implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
     implementation("org.springframework.boot:spring-boot-starter-data-redis-reactive")
+    runtimeOnly("com.mysql:mysql-connector-j")
+    implementation("org.flywaydb:flyway-core")
+    implementation("org.flywaydb:flyway-mysql")
+    implementation("org.springframework:spring-jdbc")
+
+    //jwt
+    implementation("io.jsonwebtoken:jjwt-api:0.12.3")
+    implementation("io.jsonwebtoken:jjwt-impl:0.12.3")
+    implementation("io.jsonwebtoken:jjwt-jackson:0.12.3")
 
     //security
     implementation("org.springframework.boot:spring-boot-starter-security")

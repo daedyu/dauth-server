@@ -1,6 +1,4 @@
-package com.b1nd.dauthserver.application.user.data
-
-import com.b1nd.dauthserver.domain.user.entity.UserEntity
+package com.b1nd.dauthserver.application.auth.data
 
 data class LoginResponse(
     val code: String,

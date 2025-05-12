@@ -1,7 +1,8 @@
-package com.b1nd.dauthserver.application.user.data
+package com.b1nd.dauthserver.application.auth.data
 
 import com.b1nd.dauthserver.domain.user.enumeration.ScopeType
 import com.b1nd.dauthserver.domain.user.entity.UserEntity
+import com.b1nd.dauthserver.domain.user.enumeration.RoleType
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotEmpty
 import java.util.*
@@ -18,12 +19,13 @@ data class IdLoginRequest(
     @field:NotEmpty
     val scopes: List<ScopeType>
 ) {
-    fun toEntity(refreshToken: String) =
+    fun toEntity(refreshToken: String, role: RoleType) =
         UserEntity(
             id = UUID.randomUUID(),
             dodamId = id,
             client = clientId,
             scopes = scopes,
+            role = role,
             refreshToken = refreshToken
         )
 }

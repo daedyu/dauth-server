@@ -1,10 +1,26 @@
+server:
+  port: 8003
 spring:
   application:
     name: dauth-server
   r2dbc:
-    url: ${DB_URL}
+    url: r2dbc:mysql://${DB_URL}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
+  flyway:
+    url: jdbc:mysql://${DB_URL}
+    user: ${DB_USER}
+    password: ${DB_PASSWORD}
+    locations: classpath:database/migration
+    baseline-on-migrate: true
+    baseline-version: 1
+
 app:
   dodam:
     endpoint: ${DODAM_ENDPOINT}
+  token:
+    token-endpoint: ${TOKEN_ENDPOINT}
+    access: ${TOKEN_ACCESS}
+    refresh: ${TOKEN_REFRESH}
+    reissue: ${TOKEN_REISSUE}
+    verify: ${TOKEN_VERIFY}

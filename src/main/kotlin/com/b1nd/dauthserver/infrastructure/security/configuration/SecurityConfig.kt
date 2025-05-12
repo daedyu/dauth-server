@@ -14,7 +14,9 @@ import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource
 
 @Configuration
 @EnableWebFluxSecurity
-class SecurityConfig {
+class SecurityConfig(
+    private val tokenFilter: TokenFilter
+) {
     @Bean
     protected fun filterChain(http: ServerHttpSecurity): SecurityWebFilterChain =
         http
@@ -26,7 +28,7 @@ class SecurityConfig {
                 .pathMatchers("/").permitAll()
                 .anyExchange().permitAll()
             }
-            .addFilterAt(TokenFilter(), SecurityWebFiltersOrder.AUTHENTICATION)
+            .addFilterAt(tokenFilter, SecurityWebFiltersOrder.AUTHENTICATION)
             .build()
 
     @Bean

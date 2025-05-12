@@ -12,7 +12,7 @@ data class UserEntity(
     @Id
     val id: UUID? = null,
     val dodamId: String,
-    @Column("client_id")
+    @Column("fk_client_id")
     val client: String,
     val scopes: List<ScopeType>,
     @Column("refresh_token")

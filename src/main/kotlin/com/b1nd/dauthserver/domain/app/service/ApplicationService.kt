@@ -6,9 +6,7 @@ import com.b1nd.dauthserver.domain.app.entity.ApplicationFrameworkEntity
 import com.b1nd.dauthserver.domain.app.exception.ApplicationKeyNotMatchException
 import com.b1nd.dauthserver.domain.app.repository.ApplicationFrameworkRepository
 import com.b1nd.dauthserver.domain.app.repository.ApplicationRepository
-import com.b1nd.dauthserver.domain.framework.entity.FrameworkEntity
 import kotlinx.coroutines.flow.Flow
-import reactor.core.publisher.Flux
 
 @Service
 class ApplicationService(
@@ -34,7 +32,7 @@ class ApplicationService(
         applicationRepository.findByClientIdAndClientSecret(clientId, clientSecret)?: throw ApplicationKeyNotMatchException()
 
     suspend fun getAll(): Flow<ApplicationEntity> =
-        applicationRepository.findByPublicIsTrue();
+        applicationRepository.findByIsPublicIsTrue();
 
     suspend fun getByUserId(ownerId: String): Flow<ApplicationEntity> =
         applicationRepository.findByOwnerId(ownerId)

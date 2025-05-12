@@ -9,9 +9,8 @@ spring:
     password: ${DB_PASSWORD}
   flyway:
     url: jdbc:mysql://${DB_URL}
-    user: ${DB_USER}
+    user: ${DB_USERNAME}
     password: ${DB_PASSWORD}
-    locations: classpath:database/migration
     baseline-on-migrate: true
     baseline-version: 1
 

@@ -3,6 +3,7 @@ package com.b1nd.dauthserver.domain.framework.entity
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Table
 import com.b1nd.dauthserver.domain.framework.enumeration.FrameworkType
+import org.springframework.data.relational.core.mapping.Column
 
 @Table("frameworks")
 data class FrameworkEntity(

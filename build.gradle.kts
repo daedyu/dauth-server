@@ -20,6 +20,9 @@ repositories {
 }
 
 dependencies {
+    //mac
+    implementation("io.netty:netty-resolver-dns-native-macos:4.1.107.Final:osx-aarch_64")
+
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.springframework.boot:spring-boot-starter-validation")
 

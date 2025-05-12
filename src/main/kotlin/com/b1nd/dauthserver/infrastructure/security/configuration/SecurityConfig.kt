@@ -26,6 +26,7 @@ class SecurityConfig(
             .cors { corsSpec -> corsSpec.configurationSource(corsConfigurationSource()) }
             .authorizeExchange { it
                 .pathMatchers("/").permitAll()
+                .pathMatchers("/auth/**").permitAll()
                 .anyExchange().permitAll()
             }
             .addFilterAt(tokenFilter, SecurityWebFiltersOrder.AUTHENTICATION)

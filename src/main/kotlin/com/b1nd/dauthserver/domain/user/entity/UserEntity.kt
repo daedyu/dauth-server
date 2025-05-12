@@ -14,11 +14,14 @@ data class UserEntity(
     val dodamId: String,
     @Column("fk_client_id")
     val client: String,
-    val scopes: List<ScopeType>,
+    var scopes: List<ScopeType>,
     @Column("refresh_token")
-    val refreshToken: String,
+    var refreshToken: String,
     val role: RoleType,
 ) {
-    fun updateInfo(refreshToken: String, scopes: List<ScopeType>): UserEntity =
-        this.copy(refreshToken = refreshToken, scopes = scopes)
+    fun updateInfo(refreshToken: String, scopes: List<ScopeType>): UserEntity {
+        this.refreshToken = refreshToken
+        this.scopes = scopes
+        return this
+    }
 }

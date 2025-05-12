@@ -6,7 +6,7 @@ create table applications (
     client_secret varchar(255),
     url text,
     redirect_url text,
-    is_public boolean
+    is_public bit
 );
 
 create table users (

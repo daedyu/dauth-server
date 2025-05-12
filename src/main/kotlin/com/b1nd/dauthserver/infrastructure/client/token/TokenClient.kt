@@ -27,7 +27,7 @@ class TokenClient(
     private suspend fun issue(request: TokenIssueRequest, uri: String): String =
         webClient.post()
             .uri(properties.tokenEndpoint + uri)
-            .body(request, TokenIssueRequest::class.java)
+            .bodyValue(request)
             .retrieve()
             .onStatus(HttpStatusCode::isError) { response: ClientResponse ->
                 throw TokenClientException(response.statusCode().value())

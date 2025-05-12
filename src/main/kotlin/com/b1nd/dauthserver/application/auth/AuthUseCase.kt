@@ -20,7 +20,8 @@ class AuthUseCase(
         val user: UserEntity = userService.getByDodamIdAndClient(loginInfo.member.id, request.clientId)
             ?.updateInfo(loginInfo.refreshToken, request.scopes)
             ?: request.toEntity(loginInfo.refreshToken, loginInfo.member.role)
-        userService.save(user)
-        return ResponseData.ok("id로 로그인 성공", LoginResponse.of(user.id.toString(), loginInfo.refreshToken))
+        return ResponseData.ok("id로 로그인 성공", LoginResponse.of(
+            userService.save(user).id.toString(), loginInfo.refreshToken)
+        )
     }
 }

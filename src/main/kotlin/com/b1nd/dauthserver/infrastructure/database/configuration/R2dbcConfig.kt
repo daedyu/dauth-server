@@ -1,5 +1,7 @@
 package com.b1nd.dauthserver.infrastructure.database.configuration
 
+import com.b1nd.dauthserver.domain.common.support.UUIDReadingConverter
+import com.b1nd.dauthserver.domain.common.support.UUIDWritingConverter
 import io.r2dbc.spi.ConnectionFactory
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.r2dbc.config.AbstractR2dbcConfiguration
@@ -18,6 +20,7 @@ class R2dbcConfig(
 
     override fun getCustomConverters() = listOf(
         FrameworkTypeWritingConverter(), FrameworkTypeReadingConverter(),
-        UserScopeTypeWritingConverter(), UserScopeTypeReadingConverter()
+        UserScopeTypeWritingConverter(), UserScopeTypeReadingConverter(),
+        UUIDWritingConverter(), UUIDReadingConverter()
     )
 }

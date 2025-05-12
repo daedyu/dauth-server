@@ -21,7 +21,6 @@ data class IdLoginRequest(
 ) {
     fun toEntity(refreshToken: String, role: RoleType) =
         UserEntity(
-            id = UUID.randomUUID(),
             dodamId = id,
             client = clientId,
             scopes = scopes,

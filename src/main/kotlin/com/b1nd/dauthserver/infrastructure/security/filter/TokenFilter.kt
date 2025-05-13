@@ -5,6 +5,7 @@ import com.b1nd.dauthserver.domain.user.entity.UserPrincipal
 import com.b1nd.dauthserver.domain.user.exception.UserNotFoundException
 import com.b1nd.dauthserver.domain.user.service.UserService
 import com.b1nd.dauthserver.infrastructure.client.token.TokenClient
+import com.b1nd.dauthserver.infrastructure.client.token.properties.TokenClientProperties
 import io.jsonwebtoken.lang.Strings
 import kotlinx.coroutines.reactor.mono
 import org.springframework.http.HttpHeaders
@@ -22,7 +23,8 @@ import kotlin.text.substring
 @Component
 class TokenFilter(
     private val tokenClient: TokenClient,
-    private val userService: UserService
+    private val userService: UserService,
+    private val properties: TokenClientProperties
 ): WebFilter {
     companion object {
         private const val PREFIX = "Bearer "
@@ -62,7 +64,7 @@ class TokenFilter(
 
     private suspend fun getUserPrincipal(token: String): UserPrincipal {
         val token = tokenClient.validateToken(token)
-        val user: UserEntity = userService.getByDodamIdAndClient(token.memberId, "key")?: throw UserNotFoundException()
+        val user: UserEntity = userService.getByDodamIdAndClient(token.memberId, properties.key)?: throw UserNotFoundException()
         return UserPrincipal(user)
     }
 }

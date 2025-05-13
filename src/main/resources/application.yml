@@ -1,12 +1,20 @@
 server:
   port: 8003
 spring:
+  main:
+    allow-bean-definition-overriding: true
+  token:
+    expire: 12345678910
   application:
     name: dauth-server
   r2dbc:
     url: r2dbc:mysql://${DB_URL}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
   flyway:
     url: jdbc:mysql://${DB_URL}
     user: ${DB_USERNAME}
@@ -27,3 +35,4 @@ app:
     refresh: ${TOKEN_REFRESH}
     reissue: ${TOKEN_REISSUE}
     verify: ${TOKEN_VERIFY}
+    key: ${TOKEN_KEY}

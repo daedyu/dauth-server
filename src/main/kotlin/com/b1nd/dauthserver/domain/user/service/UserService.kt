@@ -10,17 +10,12 @@ import java.util.UUID
 class UserService(
     private val repository: UserRepository
 ) {
-    suspend fun getById(id: UUID): UserEntity? =
+    suspend fun getById(id: Long): UserEntity? =
         repository.findById(id)
 
     suspend fun getByDodamIdAndClient(dodamId: String, clientId: String): UserEntity? =
         repository.findByDodamIdAndClient(dodamId, clientId)
 
-    suspend fun save(userEntity: UserEntity): UserEntity {
-        return (if (userEntity.id != null) {
-            repository.save(userEntity)
-        } else {
-            repository.insert(userEntity.copy(id = UUID.randomUUID()))
-        })
-    }
+    suspend fun save(userEntity: UserEntity): UserEntity =
+        repository.save(userEntity)
 }

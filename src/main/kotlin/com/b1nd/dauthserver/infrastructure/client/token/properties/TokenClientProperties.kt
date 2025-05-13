@@ -8,5 +8,6 @@ data class TokenClientProperties(
     val access: String,
     val reissue: String,
     val refresh: String,
-    val verify: String
+    val verify: String,
+    val key: String
 )

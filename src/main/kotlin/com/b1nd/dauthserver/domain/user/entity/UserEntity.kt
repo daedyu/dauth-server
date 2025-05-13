@@ -14,9 +14,12 @@ data class UserEntity(
     @field:Column("fk_client_id")
     val client: String,
     var scopes: List<ScopeType>,
+    @field:Column("refresh_token")
+    var refreshToken: String,
     val role: RoleType,
 ) {
-    fun updateInfo(scopes: List<ScopeType>): UserEntity {
+    fun updateInfo(refreshToken: String, scopes: List<ScopeType>): UserEntity {
+        this.refreshToken = refreshToken
         this.scopes = scopes
         return this
     }

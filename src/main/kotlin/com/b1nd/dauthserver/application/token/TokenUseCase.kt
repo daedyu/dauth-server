@@ -2,6 +2,7 @@ package com.b1nd.dauthserver.application.token
 
 import com.b1nd.dauthserver.application.support.response.ResponseData
 import com.b1nd.dauthserver.application.token.data.TokenRefreshRequest
+import com.b1nd.dauthserver.application.token.data.TokenRefreshResponse
 import com.b1nd.dauthserver.application.token.data.TokenRequest
 import com.b1nd.dauthserver.application.token.data.TokenResponse
 import com.b1nd.dauthserver.domain.app.service.ApplicationService
@@ -34,8 +35,6 @@ class TokenUseCase(
         return ResponseData.ok("토큰 발급 성공", TokenResponse(tokens.access, tokens.refresh, idToken))
     }
 
-    suspend fun reissueToken(request: TokenRefreshRequest): ResponseData<TokenResponse> {
-        val authToken = tokenClient.reissueAccess(request.refresh)
-
-    }
+    suspend fun reissueToken(request: TokenRefreshRequest): ResponseData<TokenRefreshResponse> =
+        ResponseData.ok("토큰 재발급 성공", TokenRefreshResponse(tokenClient.reissueAccess(request.refresh)))
 }

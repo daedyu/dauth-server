@@ -14,6 +14,7 @@ create table users (
     dodam_id varchar(255) not null,
     fk_client_id varchar(255) not null,
     scopes text not null,
+    refresh_token varchar(255),
     role varchar(20),
     foreign key (fk_client_id) references applications (client_id)
 );

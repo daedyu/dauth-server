@@ -21,7 +21,7 @@ class AuthUseCase(
     suspend fun idLogin(request: IdLoginRequest): ResponseData<LoginResponse> {
         val loginInfo = dodamClient.dodamLogin(request.id, request.password)
         val user: UserEntity = userService.getByDodamIdAndClient(loginInfo.member.id, request.clientId)
-            ?.updateInfo(request.scopes)
+            ?.updateInfo(loginInfo.refreshToken, request.scopes)
             ?: request.toEntity(loginInfo.refreshToken, loginInfo.member.role)
         val code = redisService.save(UUID.randomUUID().toString(), userService.save(user).id!!)
         return ResponseData.ok("id로 로그인 성공", LoginResponse.of(code, request.redirectUrl))

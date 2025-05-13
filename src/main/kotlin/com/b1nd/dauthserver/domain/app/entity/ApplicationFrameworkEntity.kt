@@ -6,9 +6,10 @@ import org.springframework.data.relational.core.mapping.Table
 
 @Table("application_frameworks")
 data class ApplicationFrameworkEntity(
-    @Id
+    @field:Id
     val id: Long? = null,
-    @Column("fk_application_id")
+    @field:Column("fk_application_id")
     val applicationId: Long,
+    @field:Column("fk_framework_id")
     val frameworkId: Long
 )

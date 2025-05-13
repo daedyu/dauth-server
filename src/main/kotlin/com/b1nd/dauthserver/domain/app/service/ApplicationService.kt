@@ -18,7 +18,7 @@ class ApplicationService(
 
     suspend fun saveFrameworks(applicationFrameworkEntities: List<ApplicationFrameworkEntity>) {
         applicationFrameworkEntities
-            .map { applicationFrameworkRepository.save(it) }
+            .forEach { applicationFrameworkRepository.save(it) }
     }
 
     suspend fun delete(id: Long) =

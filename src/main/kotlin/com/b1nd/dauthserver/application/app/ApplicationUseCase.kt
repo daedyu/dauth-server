@@ -18,6 +18,7 @@ class ApplicationUseCase(
         val user = UserAuthenticationHolder.current()
         frameworkService.validateByIdIn(request.frameworks)
         val application = applicationService.save(request.toEntity(user.dodamId))
+        println("아이디" + application.id)
         applicationService.saveFrameworks(request.toFrameWorks(application.id!!))
         return Response.ok("앱 등록 성공")
     }

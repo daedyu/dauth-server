@@ -14,6 +14,6 @@ class FrameworkService(
         repository.findAll()
 
     suspend fun validateByIdIn(ids: List<Long>) {
-        repository.findByIdIn(ids).toList().isEmpty().let { throw FrameworkNotFoundException() }
+        if (repository.findByIdIn(ids).toList().isEmpty()) throw FrameworkNotFoundException()
     }
 }

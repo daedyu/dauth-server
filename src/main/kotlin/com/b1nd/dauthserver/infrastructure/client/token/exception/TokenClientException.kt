@@ -3,7 +3,7 @@ package com.b1nd.dauthserver.infrastructure.client.token.exception
 import com.b1nd.dauthserver.domain.common.enumeration.GlobalExceptionStatusCode
 import com.b1nd.dauthserver.domain.common.exception.BasicException
 
-class TokenClientException (code: Int) : BasicException(
+class TokenClientException (code: Int): BasicException(
     statusCode = when (code) {
         400 -> GlobalExceptionStatusCode.TOKEN_NOT_PROVIDED
         401,500 -> GlobalExceptionStatusCode.INVALID_TOKEN

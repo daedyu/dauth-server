@@ -10,6 +10,7 @@ import com.b1nd.dauthserver.domain.user.exception.UserNotFoundException
 import com.b1nd.dauthserver.domain.user.service.UserService
 import com.b1nd.dauthserver.infrastructure.client.dodam.DodamClient
 import com.b1nd.dauthserver.infrastructure.client.token.TokenClient
+import com.b1nd.dauthserver.infrastructure.database.redis.enumeration.RedisKeyType
 import com.b1nd.dauthserver.infrastructure.database.redis.service.RedisService
 import com.b1nd.dauthserver.infrastructure.security.token.core.TokenProvider
 import com.b1nd.dauthserver.infrastructure.security.token.properties.TokenProperties
@@ -26,12 +27,12 @@ class TokenUseCase(
     private val applicationService: ApplicationService
 ) {
     suspend fun issueToken(request: TokenRequest): ResponseData<TokenResponse> {
-        val userId = redisService.get(request.code.toString())
-        val user = userService.getById(userId)?: throw UserNotFoundException()
+        val userId = redisService.get(RedisKeyType.LOGIN_TOKEN, request.code.toString())
+        val user = userService.getById(userId.toLong())?: throw UserNotFoundException()
         val application = applicationService.findByClientIdAndSecret(user.client, request.clientSecret)
         val tokens = tokenClient.issueTokens(user.dodamId, user.role.accessLevel)
         val idToken = tokenProvider.generateIdToken(application.clientId, user.role, application.url, user.dodamId,application.clientSecret)
-        redisService.delete(request.code.toString())
+        redisService.delete(RedisKeyType.LOGIN_TOKEN, request.code.toString())
         return ResponseData.ok("토큰 발급 성공", TokenResponse(tokens.access, tokens.refresh, idToken))
     }
 

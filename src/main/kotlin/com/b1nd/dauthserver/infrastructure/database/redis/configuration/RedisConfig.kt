@@ -19,25 +19,6 @@ class RedisConfig(
     private val properties: RedisProperties,
 ) {
     @Bean
-    fun reactiveRedisTemplate(
-        connectionFactory: ReactiveRedisConnectionFactory
-    ): ReactiveRedisTemplate<String, Long> {
-        val serializer = StringRedisSerializer()
-        val longSerializer = GenericToStringSerializer(Long::class.java)
-
-        val serializationContext = RedisSerializationContext
-            .newSerializationContext<String, Long>()
-            .key(serializer)
-            .value(longSerializer)
-            .hashKey(serializer)
-            .hashValue(longSerializer)
-            .build()
-
-        return ReactiveRedisTemplate(connectionFactory, serializationContext)
-    }
-
-
-    @Bean
     fun redisConnectionFactory(): ReactiveRedisConnectionFactory {
         return LettuceConnectionFactory(RedisStandaloneConfiguration().apply {
             hostName = properties.host

@@ -1,23 +1,31 @@
 package com.b1nd.dauthserver.infrastructure.database.redis.service
 
+import com.b1nd.dauthserver.infrastructure.database.redis.enumeration.RedisKeyType
 import com.b1nd.dauthserver.infrastructure.database.redis.exception.RedisKeyNotFoundException
 import kotlinx.coroutines.reactive.awaitSingle
+import kotlinx.coroutines.reactor.awaitSingleOrNull
 import org.springframework.data.redis.core.ReactiveRedisTemplate
 import org.springframework.stereotype.Service
 import java.time.Duration
 
 @Service
 class RedisService(
-    private val redisTemplate: ReactiveRedisTemplate<String, Long>
+    private val redisTemplate: ReactiveRedisTemplate<String, String>
 ) {
-    suspend fun save(key: String, value: Long): String {
-        redisTemplate.opsForValue().set(key, value, Duration.ofHours(1)).awaitSingle()
+    suspend fun save(type: RedisKeyType, key: String, value: String): String {
+        redisTemplate.opsForValue().set(type.name + key, value, Duration.ofHours(1)).awaitSingle()
         return key
     }
 
-    suspend fun get(key: String): Long =
-        redisTemplate.opsForValue().get(key).awaitSingle()?: throw RedisKeyNotFoundException()
+    suspend fun update(type: RedisKeyType, key: String, value: String) =
+        save(type, key, value)
 
-    suspend fun delete(key: String) =
-        redisTemplate.delete(key).awaitSingle()
+    suspend fun exist(key: String): Boolean =
+        redisTemplate.hasKey(key).awaitSingle()
+
+    suspend fun get(type: RedisKeyType, key: String): String =
+        redisTemplate.opsForValue().get(type.name + key).awaitSingleOrNull()?: throw RedisKeyNotFoundException()
+
+    suspend fun delete(type: RedisKeyType, key: String) =
+        redisTemplate.delete(type.name + key).awaitSingle()
 }

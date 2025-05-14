@@ -6,5 +6,5 @@ enum class RedisExceptionStatusCode(
     override val message: String,
     override val status: Int
 ): StatusCode {
-    KEY_NOT_FOUND("Key Not Found", 404),
+    KEY_NOT_FOUND("찾을 수 없는 키", 404),
 }

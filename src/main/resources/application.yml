@@ -21,10 +21,6 @@ spring:
     password: ${DB_PASSWORD}
     baseline-on-migrate: true
     baseline-version: 1
-logging:
-  level:
-    org.springframework.web: DEBUG
-    org.springframework.r2dbc: DEBUG
 
 app:
   dodam:

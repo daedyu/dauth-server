@@ -3,4 +3,4 @@ package com.b1nd.dauthserver.domain.framework.exception
 import com.b1nd.dauthserver.domain.common.exception.BasicException
 import com.b1nd.dauthserver.domain.framework.enumeration.FrameworkExceptionStatusCode
 
-class FrameworkNotFoundException : BasicException(FrameworkExceptionStatusCode.FRAMEWORK_NOT_FOUND)
+class FrameworkNotFoundException: BasicException(FrameworkExceptionStatusCode.FRAMEWORK_NOT_FOUND)

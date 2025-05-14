@@ -6,4 +6,5 @@ import org.springframework.data.repository.kotlin.CoroutineCrudRepository
 
 interface FrameworkRepository: CoroutineCrudRepository<FrameworkEntity, Long> {
     suspend fun findByIdIn(ids: List<Long>): Flow<FrameworkEntity>
+    suspend fun findByName(name: String): FrameworkEntity?
 }

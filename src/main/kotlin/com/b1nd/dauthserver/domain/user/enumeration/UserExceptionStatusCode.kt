@@ -7,4 +7,6 @@ enum class UserExceptionStatusCode(
     override val status: Int
 ): StatusCode {
     USER_NOT_FOUND("User Not Found", 404),
+    CODE_NOT_FOUND("Code Not Found", 404),
+    CODE_NOT_APPLIED("인증되지 않은 코드", 403)
 }

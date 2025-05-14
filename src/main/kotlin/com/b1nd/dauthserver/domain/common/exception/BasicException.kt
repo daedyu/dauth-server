@@ -4,6 +4,4 @@ import com.b1nd.dauthserver.domain.common.enumeration.StatusCode
 
 open class BasicException(
     val statusCode: StatusCode
-): RuntimeException() {
-
-}
+): RuntimeException()

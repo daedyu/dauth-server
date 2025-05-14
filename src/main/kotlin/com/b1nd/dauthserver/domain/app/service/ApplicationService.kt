@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service
 import com.b1nd.dauthserver.domain.app.entity.ApplicationEntity
 import com.b1nd.dauthserver.domain.app.entity.ApplicationFrameworkEntity
 import com.b1nd.dauthserver.domain.app.exception.ApplicationKeyNotMatchException
+import com.b1nd.dauthserver.domain.app.exception.ApplicationNameAlreadyExistException
 import com.b1nd.dauthserver.domain.app.repository.ApplicationFrameworkRepository
 import com.b1nd.dauthserver.domain.app.repository.ApplicationRepository
 import kotlinx.coroutines.flow.Flow
@@ -20,6 +21,9 @@ class ApplicationService(
         applicationFrameworkEntities
             .forEach { applicationFrameworkRepository.save(it) }
     }
+
+    suspend fun validateByName(name: String) =
+        applicationRepository.findByName(name)?.let { throw ApplicationNameAlreadyExistException() }
 
     suspend fun delete(id: Long) =
         applicationRepository.findById(id)

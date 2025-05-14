@@ -8,4 +8,5 @@ enum class ApplicationExceptionStatusCode(
 ): StatusCode {
     APPLICATION_NOT_FOUND("Application Not Found", 404),
     APPLICATION_KEY_NOT_MATCH("Application Key Not Match", 403),
+    APPLICATION_NAME_ALEADY_EXIST("이미 존재하는 애플리케이션 이름", 409)
 }

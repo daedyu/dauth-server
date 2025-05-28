@@ -13,19 +13,24 @@ class RedisService(
     private val redisTemplate: ReactiveRedisTemplate<String, String>
 ) {
     suspend fun save(type: RedisKeyType, key: String, value: String): String {
-        redisTemplate.opsForValue().set(type.name + key, value, Duration.ofHours(1)).awaitSingle()
+        redisTemplate.opsForValue().set(joinTypeAndKey(type, key), value, Duration.ofHours(1)).awaitSingle()
         return key
     }
 
     suspend fun update(type: RedisKeyType, key: String, value: String) =
-        save(type, key, value)
+        redisTemplate.opsForValue().getAndSet(joinTypeAndKey(type, key), value).awaitSingleOrNull()
+            ?: throw RedisKeyNotFoundException()
 
-    suspend fun exist(key: String): Boolean =
-        redisTemplate.hasKey(key).awaitSingle()
+
+    suspend fun exist(type: RedisKeyType, key: String): Boolean =
+        redisTemplate.hasKey(joinTypeAndKey(type, key)).awaitSingle()
 
     suspend fun get(type: RedisKeyType, key: String): String =
-        redisTemplate.opsForValue().get(type.name + key).awaitSingleOrNull()?: throw RedisKeyNotFoundException()
+        redisTemplate.opsForValue().get(joinTypeAndKey(type, key)).awaitSingleOrNull()?: throw RedisKeyNotFoundException()
 
     suspend fun delete(type: RedisKeyType, key: String) =
-        redisTemplate.delete(type.name + key).awaitSingle()
+        redisTemplate.delete(joinTypeAndKey(type, key)).awaitSingle()
+
+    private fun joinTypeAndKey(type: RedisKeyType, key: String): String =
+        type.name + "::" + key
 }

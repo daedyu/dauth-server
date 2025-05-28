@@ -8,6 +8,7 @@ import com.b1nd.dauthserver.application.auth.data.QrLoginRequest
 import com.b1nd.dauthserver.application.auth.data.QrLoginResponse
 import com.b1nd.dauthserver.application.support.response.Response
 import com.b1nd.dauthserver.application.support.response.ResponseData
+import com.b1nd.dauthserver.domain.auth.service.AuthenticationWordService
 import com.b1nd.dauthserver.domain.user.entity.UserEntity
 import com.b1nd.dauthserver.domain.user.enumeration.ScopeType
 import com.b1nd.dauthserver.domain.user.exception.CodeNotAppliedException
@@ -18,13 +19,13 @@ import com.b1nd.dauthserver.infrastructure.database.redis.service.RedisService
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import java.util.UUID
-import kotlin.math.log
 
 @Component
 @Transactional(rollbackFor = [Exception::class])
 class AuthUseCase(
     private val dodamClient: DodamClient,
     private val userService: UserService,
+    private val authService: AuthenticationWordService,
     private val redisService: RedisService
 ) {
     suspend fun idLogin(request: IdLoginRequest): ResponseData<LoginResponse> {
@@ -36,8 +37,9 @@ class AuthUseCase(
 
     suspend fun createQr(request: CreateQrRequest): ResponseData<QrLoginResponse> {
         val code = UUID.randomUUID().toString()
+        val word = authService.getRandomCode()
         redisService.save(RedisKeyType.QR_SCOPES, code, request.scopes.joinToString(" ") { it.value })
-        redisService.save(RedisKeyType.QR_LOGIN_CHECKED, code, false.toString())
+        redisService.save(RedisKeyType.QR_LOGIN_CHECKED, code + authService.getWord(word), "")
         return ResponseData.created("qr용 코드 생성 성공", QrLoginResponse(code))
     }
 
@@ -46,16 +48,16 @@ class AuthUseCase(
         val loginInfo = dodamClient.dodamMy(request.access)
         val newUser = UserEntity(dodamId = loginInfo.id, client = request.clientId, scopes = scopes, refreshToken = request.refresh, role = loginInfo.role)
         val user = saveOrUpdateUser(loginInfo.id, request.clientId, request.refresh, scopes, newUser)
-        redisService.update(RedisKeyType.QR_LOGIN_CHECKED, request.code, user.id!!.toString())
+        redisService.update(RedisKeyType.QR_LOGIN_CHECKED, request.code + request.word, user.id!!.toString())
         redisService.delete(RedisKeyType.QR_SCOPES, request.code)
         return Response.ok("qr 로그인 성공")
     }
 
     suspend fun checkQrLogin(request: CheckQrRequest): ResponseData<LoginResponse> {
-        val userId = redisService.get(RedisKeyType.QR_LOGIN_CHECKED, request.code)
+        val userId = redisService.get(RedisKeyType.QR_LOGIN_CHECKED, request.code + request.word)
         if (userId.isBlank()) throw CodeNotAppliedException()
         val user = userService.getById(userId.toLong())?: throw CodeNotAppliedException()
-        redisService.delete(RedisKeyType.QR_LOGIN_CHECKED, request.code)
+        redisService.delete(RedisKeyType.QR_LOGIN_CHECKED, request.code + request.word)
         return ResponseData.ok("qr 로그인 조회 성공", LoginResponse.of(createCode(user.id!!), request.redirectUrl))
     }
 

@@ -11,4 +11,6 @@ data class QrLoginRequest(
     val refresh: String,
     @field:NotBlank
     val clientId: String,
+    @field:NotBlank
+    val word: String
 )

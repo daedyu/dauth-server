@@ -33,3 +33,8 @@ create table application_frameworks (
     foreign key (fk_application_id) references applications (id),
     foreign key (fk_framework_id) references frameworks (id)
 );
+
+create table authentication_words (
+    id bigint primary key not null auto_increment,
+    word varchar(10) not null
+);

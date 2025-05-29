@@ -51,7 +51,10 @@ class GlobalExceptionHandler {
             .body(ErrorResponse(HttpStatus.METHOD_NOT_ALLOWED.value(), "지원되지 않는 메서드 형식"))
 
     @ExceptionHandler(Exception::class)
-    suspend fun handleRuntimeException(exception: Exception): ResponseEntity<ErrorResponse> =
-        ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+    suspend fun handleRuntimeException(exception: Exception): ResponseEntity<ErrorResponse> {
+        print(exception.stackTraceToString())
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
             .body(ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal Server Error"))
+    }
+
 }

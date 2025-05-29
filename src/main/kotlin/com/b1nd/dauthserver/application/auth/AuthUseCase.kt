@@ -37,10 +37,11 @@ class AuthUseCase(
 
     suspend fun createQr(request: CreateQrRequest): ResponseData<QrLoginResponse> {
         val code = UUID.randomUUID().toString()
-        val word = authService.getRandomCode()
+        val words = authService.getRandomCode()
+        val word = authService.getWord(words)
         redisService.save(RedisKeyType.QR_SCOPES, code, request.scopes.joinToString(" ") { it.value })
-        redisService.save(RedisKeyType.QR_LOGIN_CHECKED, code + authService.getWord(word), "")
-        return ResponseData.created("qr용 코드 생성 성공", QrLoginResponse(code))
+        redisService.save(RedisKeyType.QR_LOGIN_CHECKED, code + word, "")
+        return ResponseData.created("qr용 코드 생성 성공", QrLoginResponse(code, words, word))
     }
 
     suspend fun qrLogin(request: QrLoginRequest): Response {

@@ -1,3 +1,5 @@
 package com.b1nd.dauthserver.domain.auth.exception
 
-class AuthenticationWordNotFoundException : RuntimeException("Authentication Word Not Found")
+import com.b1nd.dauthserver.domain.common.exception.BasicException
+
+class AuthenticationWordNotFoundException : BasicException(AuthenticationWordStatusCode.AUTHENTICATION_WORD_NOT_FOUND)

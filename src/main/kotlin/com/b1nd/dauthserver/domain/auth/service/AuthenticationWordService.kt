@@ -9,7 +9,8 @@ class AuthenticationWordService(
     private val repository: AuthenticationWordRepository
 ) {
     suspend fun getRandomCode(): String =
-        repository.findRandomOne()?: throw AuthenticationWordNotFoundException()
+        repository.findRandomOne()?.word
+            ?: throw AuthenticationWordNotFoundException()
 
     fun getWord(word: String) =
         word.random().toString()

@@ -1,10 +1,14 @@
 package com.b1nd.dauthserver.application.app
 
-import com.b1nd.dauthserver.application.app.data.CreateApplicationRequest
+import com.b1nd.dauthserver.application.app.data.request.CreateApplicationRequest
+import com.b1nd.dauthserver.application.app.data.response.ApplicationResponse
+import com.b1nd.dauthserver.application.app.data.response.MyApplicationResponse
 import com.b1nd.dauthserver.application.support.response.Response
 import com.b1nd.dauthserver.domain.app.service.ApplicationService
 import com.b1nd.dauthserver.domain.framework.service.FrameworkService
 import com.b1nd.dauthserver.infrastructure.security.support.UserAuthenticationHolder
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.toList
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
@@ -25,5 +29,17 @@ class ApplicationUseCase(
     private suspend fun validateOnCreate(request: CreateApplicationRequest) {
         applicationService.validateByName(request.name)
         frameworkService.validateByIdIn(request.frameworks)
+    }
+
+    suspend fun getAll(): List<ApplicationResponse> =
+        ApplicationResponse.of(applicationService.getAll()).toList()
+
+    suspend fun getMy(): MyApplicationResponse {
+        val user = UserAuthenticationHolder.current()
+        val applications = applicationService.getByUserId(user.dodamId)
+        return MyApplicationResponse(
+            applicationService.countUser(applications),
+            ApplicationResponse.ofWithSecret(applications).toList()
+        )
     }
 }

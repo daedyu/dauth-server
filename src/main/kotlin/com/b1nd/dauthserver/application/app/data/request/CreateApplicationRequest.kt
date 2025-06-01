@@ -1,4 +1,4 @@
-package com.b1nd.dauthserver.application.app.data
+package com.b1nd.dauthserver.application.app.data.request
 
 import com.b1nd.dauthserver.domain.app.entity.ApplicationEntity
 import com.b1nd.dauthserver.domain.app.entity.ApplicationFrameworkEntity

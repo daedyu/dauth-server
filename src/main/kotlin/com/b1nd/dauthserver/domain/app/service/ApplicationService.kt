@@ -1,16 +1,20 @@
 package com.b1nd.dauthserver.domain.app.service
 
-import org.springframework.stereotype.Service
 import com.b1nd.dauthserver.domain.app.entity.ApplicationEntity
 import com.b1nd.dauthserver.domain.app.entity.ApplicationFrameworkEntity
 import com.b1nd.dauthserver.domain.app.exception.ApplicationKeyNotMatchException
 import com.b1nd.dauthserver.domain.app.exception.ApplicationNameAlreadyExistException
 import com.b1nd.dauthserver.domain.app.repository.ApplicationFrameworkRepository
 import com.b1nd.dauthserver.domain.app.repository.ApplicationRepository
+import com.b1nd.dauthserver.domain.user.repository.UserRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.toList
+import org.springframework.stereotype.Service
 
 @Service
 class ApplicationService(
+    private val userRepository: UserRepository,
     private val applicationRepository: ApplicationRepository,
     private val applicationFrameworkRepository: ApplicationFrameworkRepository
 ) {
@@ -31,6 +35,9 @@ class ApplicationService(
 
     suspend fun getById(id: Long) =
         applicationRepository.findById(id)
+
+    suspend fun countUser(applications: Flow<ApplicationEntity>) =
+        userRepository.countByClientIn(applications.map { it.clientId }.toList())
 
     suspend fun findByClientIdAndSecret(clientId: String, clientSecret: String): ApplicationEntity =
         applicationRepository.findByClientIdAndClientSecret(clientId, clientSecret)?: throw ApplicationKeyNotMatchException()

@@ -1,8 +1,10 @@
 package com.b1nd.dauthserver.infrastructure.security.configuration
 
+import com.b1nd.dauthserver.infrastructure.security.filter.FilterExceptionHandler
 import com.b1nd.dauthserver.infrastructure.security.filter.TokenFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder
 import org.springframework.security.config.web.server.ServerHttpSecurity
@@ -15,7 +17,8 @@ import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource
 @Configuration
 @EnableWebFluxSecurity
 class SecurityConfig(
-    private val tokenFilter: TokenFilter
+    private val tokenFilter: TokenFilter,
+    private val filterExceptionHandler: FilterExceptionHandler
 ) {
     @Bean
     protected fun filterChain(http: ServerHttpSecurity): SecurityWebFilterChain =
@@ -27,8 +30,11 @@ class SecurityConfig(
             .authorizeExchange { it
                 .pathMatchers("/").permitAll()
                 .pathMatchers("/auth/**").permitAll()
-                .anyExchange().permitAll()
+                .pathMatchers(HttpMethod.POST, "/token").permitAll()
+                .pathMatchers(HttpMethod.GET, "/app").permitAll()
+                .anyExchange().authenticated()
             }
+            .addFilterBefore(filterExceptionHandler, SecurityWebFiltersOrder.AUTHENTICATION)
             .addFilterAt(tokenFilter, SecurityWebFiltersOrder.AUTHENTICATION)
             .build()
 

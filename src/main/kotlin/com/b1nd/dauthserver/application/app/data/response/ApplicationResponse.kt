@@ -1,6 +1,7 @@
 package com.b1nd.dauthserver.application.app.data.response
 
 import com.b1nd.dauthserver.domain.app.entity.ApplicationEntity
+import com.b1nd.dauthserver.domain.app.entity.data.ApplicationWithFrameworks
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -9,22 +10,21 @@ data class ApplicationResponse(
     val url: String,
     val redirectUrl: String?,
     val clientId: String?,
-    val clientSecret: String?
+    val clientSecret: String?,
+    val frameworks: List<String>
 ) {
     companion object {
-        private fun fromEntity(application: ApplicationEntity, includeSecrets: Boolean): ApplicationResponse =
+        fun fromEntity(application: ApplicationWithFrameworks, includeSecret: Boolean): ApplicationResponse =
             ApplicationResponse(
-                name = application.name,
-                url = application.url,
-                redirectUrl = if (includeSecrets) application.redirectUrl else null,
-                clientId = if (includeSecrets) application.clientId else null,
-                clientSecret = if (includeSecrets) application.clientSecret else null
+                name = application.application.name,
+                url = application.application.name,
+                frameworks = application.frameworks.map { it.name },
+                redirectUrl = if (includeSecret) application.application.redirectUrl else null,
+                clientId = if (includeSecret) application.application.clientId else null,
+                clientSecret = if (includeSecret) application.application.clientSecret else null
             )
 
-        fun ofWithSecret(applications: Flow<ApplicationEntity>): Flow<ApplicationResponse> =
-            applications.map { fromEntity(it, includeSecrets = true) }
-
-        fun of(applications: Flow<ApplicationEntity>): Flow<ApplicationResponse> =
-            applications.map { fromEntity(it, includeSecrets = false) }
+        fun of(applications: List<ApplicationWithFrameworks>): List<ApplicationResponse> =
+           applications.map { fromEntity(it, false) }
     }
 }

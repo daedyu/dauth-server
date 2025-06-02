@@ -34,12 +34,12 @@ class ApplicationUseCase(
     suspend fun getAll(): List<ApplicationResponse> =
         ApplicationResponse.of(applicationService.getAll()).toList()
 
-    suspend fun getMy(): MyApplicationResponse {
+/*    suspend fun getMy(): MyApplicationResponse {
         val user = UserAuthenticationHolder.current()
         val applications = applicationService.getByUserId(user.dodamId)
         return MyApplicationResponse(
             applicationService.countUser(applications),
             ApplicationResponse.ofWithSecret(applications).toList()
         )
-    }
+    }*/
 }

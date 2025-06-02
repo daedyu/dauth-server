@@ -1,5 +1,6 @@
 package com.b1nd.dauthserver.domain.app.entity
 
+import com.b1nd.dauthserver.domain.framework.entity.FrameworkEntity
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table

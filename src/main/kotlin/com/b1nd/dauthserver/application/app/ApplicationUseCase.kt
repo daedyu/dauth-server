@@ -7,8 +7,6 @@ import com.b1nd.dauthserver.application.support.response.Response
 import com.b1nd.dauthserver.domain.app.service.ApplicationService
 import com.b1nd.dauthserver.domain.framework.service.FrameworkService
 import com.b1nd.dauthserver.infrastructure.security.support.UserAuthenticationHolder
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.toList
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
@@ -34,12 +32,12 @@ class ApplicationUseCase(
     suspend fun getAll(): List<ApplicationResponse> =
         ApplicationResponse.of(applicationService.getAll()).toList()
 
-/*    suspend fun getMy(): MyApplicationResponse {
+    suspend fun getMy(): MyApplicationResponse {
         val user = UserAuthenticationHolder.current()
         val applications = applicationService.getByUserId(user.dodamId)
         return MyApplicationResponse(
-            applicationService.countUser(applications),
-            ApplicationResponse.ofWithSecret(applications).toList()
+            applicationService.countUser(applications.map { it.application }),
+            ApplicationResponse.ofWithSecret(applications)
         )
-    }*/
+    }
 }

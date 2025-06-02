@@ -49,6 +49,6 @@ class ApplicationService(
     suspend fun getAll(): List<ApplicationWithFrameworks> =
         applicationQueryRepository.findAllApplicationsWithFrameworks()
 
-    suspend fun getByUserId(ownerId: String): List<ApplicationEntity> =
-        applicationRepository.findByOwnerId(ownerId).toList()
+    suspend fun getByUserId(ownerId: String): List<ApplicationWithFrameworks> =
+        applicationQueryRepository.findApplicationsByOwnerId(ownerId)
 }

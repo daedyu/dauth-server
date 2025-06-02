@@ -26,5 +26,9 @@ data class ApplicationResponse(
 
         fun of(applications: List<ApplicationWithFrameworks>): List<ApplicationResponse> =
            applications.map { fromEntity(it, false) }
+
+        fun ofWithSecret(applications: List<ApplicationWithFrameworks>): List<ApplicationResponse> =
+            applications.map { fromEntity(it, true) }
+
     }
 }

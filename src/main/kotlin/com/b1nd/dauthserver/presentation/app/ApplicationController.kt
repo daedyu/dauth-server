@@ -17,10 +17,10 @@ class ApplicationController(
     @PostMapping
     suspend fun create(@Valid @RequestBody request: CreateApplicationRequest): Response =
         useCase.create(request)
-//
-//    @GetMapping("/my")
-//    suspend fun getMy(): MyApplicationResponse =
-//        useCase.getMy()
+
+    @GetMapping("/my")
+    suspend fun getMy(): MyApplicationResponse =
+        useCase.getMy()
 
     @GetMapping
     suspend fun getAll(): List<ApplicationResponse> =

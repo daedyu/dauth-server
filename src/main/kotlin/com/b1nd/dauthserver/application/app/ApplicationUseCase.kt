@@ -1,6 +1,7 @@
 package com.b1nd.dauthserver.application.app
 
 import com.b1nd.dauthserver.application.app.data.request.CreateApplicationRequest
+import com.b1nd.dauthserver.application.app.data.request.UpdateOwnerRequest
 import com.b1nd.dauthserver.application.app.data.response.ApplicationResponse
 import com.b1nd.dauthserver.application.app.data.response.MyApplicationResponse
 import com.b1nd.dauthserver.application.support.response.Response
@@ -27,6 +28,12 @@ class ApplicationUseCase(
     private suspend fun validateOnCreate(request: CreateApplicationRequest) {
         applicationService.validateByName(request.name)
         frameworkService.validateByIdIn(request.frameworks)
+    }
+
+    suspend fun updateOwner(request: UpdateOwnerRequest): Response {
+        val user = UserAuthenticationHolder.current()
+        applicationService.updateOwner(user.dodamId, request.clientId, request.newOwnerDodamId)
+        return Response.ok("소유자 변경 성공")
     }
 
     suspend fun getAll(): List<ApplicationResponse> =

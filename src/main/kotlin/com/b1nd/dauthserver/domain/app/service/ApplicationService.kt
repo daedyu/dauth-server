@@ -37,6 +37,12 @@ class ApplicationService(
         applicationRepository.findById(id)
             ?.let { applicationRepository.delete(it) }
 
+    suspend fun updateOwner(ownerId: String, clientId: String, dodamId: String) {
+        val application = applicationRepository.findByOwnerIdAndClientId(ownerId, clientId)
+        application.updateOwner(dodamId)
+        applicationRepository.save(application)
+    }
+
     suspend fun getById(id: Long) =
         applicationRepository.findById(id)
 

@@ -5,14 +5,12 @@ import com.b1nd.dauthserver.domain.app.entity.ApplicationFrameworkEntity
 import com.b1nd.dauthserver.domain.app.entity.data.ApplicationWithFrameworks
 import com.b1nd.dauthserver.domain.app.exception.ApplicationKeyNotMatchException
 import com.b1nd.dauthserver.domain.app.exception.ApplicationNameAlreadyExistException
+import com.b1nd.dauthserver.domain.app.exception.ApplicationNotFoundException
 import com.b1nd.dauthserver.domain.app.repository.ApplicationFrameworkRepository
 import com.b1nd.dauthserver.domain.app.repository.ApplicationQueryRepository
 import com.b1nd.dauthserver.domain.app.repository.ApplicationRepository
+import com.b1nd.dauthserver.domain.framework.entity.FrameworkEntity
 import com.b1nd.dauthserver.domain.user.repository.UserRepository
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEmpty
-import kotlinx.coroutines.flow.toList
 import org.springframework.stereotype.Service
 
 @Service
@@ -37,8 +35,19 @@ class ApplicationService(
         applicationRepository.findById(id)
             ?.let { applicationRepository.delete(it) }
 
+    suspend fun updateInfo(ownerId: String, clientId: String, name: String?, url: String?, redirectUrl: String?, isPublic: Boolean?, frameworks: List<FrameworkEntity>) {
+        val application = applicationRepository.findByOwnerIdAndClientId(ownerId, clientId)
+            ?: throw ApplicationNotFoundException()
+        application.updateInfo(name, url, redirectUrl, isPublic)
+        applicationRepository.save(application)
+        saveFrameworks(frameworks.map {
+            ApplicationFrameworkEntity(applicationId = application.id!!, frameworkId = it.id!!)
+        })
+    }
+
     suspend fun updateOwner(ownerId: String, clientId: String, dodamId: String) {
         val application = applicationRepository.findByOwnerIdAndClientId(ownerId, clientId)
+            ?: throw ApplicationNotFoundException()
         application.updateOwner(dodamId)
         applicationRepository.save(application)
     }

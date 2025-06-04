@@ -8,20 +8,27 @@ import org.springframework.data.relational.core.mapping.Table
 data class ApplicationEntity(
     @Id
     val id: Long? = null,
-    val name: String,
+    var name: String,
     @Column("owner_id")
     var ownerId: String,
     @Column("client_id")
     val clientId: String,
     @Column("client_secret")
     val clientSecret: String,
-    val url: String,
+    var url: String,
     @Column("redirect_url")
-    val redirectUrl: String,
+    var redirectUrl: String,
     @Column("is_public")
-    val isPublic: Boolean
+    var isPublic: Boolean
 ) {
     fun updateOwner(ownerId: String) {
         this.ownerId = ownerId
+    }
+
+    fun updateInfo(name: String?, url: String?, redirectUrl: String?, isPublic: Boolean?) {
+        if (name != null) this.name = name
+        if (url != null) this.url = url
+        if (redirectUrl != null) this.redirectUrl = redirectUrl
+        if (isPublic != null) this.isPublic = isPublic
     }
 }

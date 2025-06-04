@@ -8,7 +8,7 @@ interface ApplicationRepository: CoroutineCrudRepository<ApplicationEntity, Long
     suspend fun findByName(name: String): ApplicationEntity?
     suspend fun findByIsPublicIsTrue(): Flow<ApplicationEntity>
     suspend fun findByOwnerId(ownerId: String): Flow<ApplicationEntity>
-    suspend fun findByOwnerIdAndClientId(ownerId: String, clientId: String): ApplicationEntity
+    suspend fun findByOwnerIdAndClientId(ownerId: String, clientId: String): ApplicationEntity?
     suspend fun findByClientId(clientId: String): ApplicationEntity?
     suspend fun findByClientIdAndClientSecret(clientId: String, clientSecret: String): ApplicationEntity?
 }

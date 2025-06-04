@@ -2,6 +2,7 @@ package com.b1nd.dauthserver.presentation.app
 
 import com.b1nd.dauthserver.application.app.ApplicationUseCase
 import com.b1nd.dauthserver.application.app.data.request.CreateApplicationRequest
+import com.b1nd.dauthserver.application.app.data.request.UpdateApplicationRequest
 import com.b1nd.dauthserver.application.app.data.request.UpdateOwnerRequest
 import com.b1nd.dauthserver.application.app.data.response.ApplicationResponse
 import com.b1nd.dauthserver.application.app.data.response.MyApplicationResponse
@@ -22,6 +23,10 @@ class ApplicationController(
     @PatchMapping("/owner")
     suspend fun updateOwner(@Valid @RequestBody request: UpdateOwnerRequest): Response =
         useCase.updateOwner(request)
+
+    @PatchMapping
+    suspend fun updateApplication(@Valid @RequestBody request: UpdateApplicationRequest): Response =
+        useCase.updateInfo(request)
 
     @GetMapping("/my")
     suspend fun getMy(): MyApplicationResponse =

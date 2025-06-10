@@ -7,6 +7,7 @@ import com.b1nd.dauthserver.application.app.data.request.UpdateOwnerRequest
 import com.b1nd.dauthserver.application.app.data.response.ApplicationResponse
 import com.b1nd.dauthserver.application.app.data.response.MyApplicationResponse
 import com.b1nd.dauthserver.application.support.response.Response
+import com.b1nd.dauthserver.application.support.response.ResponseData
 import jakarta.validation.Valid
 import kotlinx.coroutines.flow.Flow
 import org.springframework.web.bind.annotation.*
@@ -29,10 +30,10 @@ class ApplicationController(
         useCase.updateInfo(request)
 
     @GetMapping("/my")
-    suspend fun getMy(): MyApplicationResponse =
+    suspend fun getMy(): ResponseData<MyApplicationResponse> =
         useCase.getMy()
 
     @GetMapping
-    suspend fun getAll(): List<ApplicationResponse> =
+    suspend fun getAll(): ResponseData<List<ApplicationResponse>> =
         useCase.getAll()
 }

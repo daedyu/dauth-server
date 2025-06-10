@@ -7,14 +7,14 @@ import jakarta.validation.constraints.NotEmpty
 import java.util.UUID
 
 data class CreateApplicationRequest(
-    @field:NotBlank
+    @NotBlank
     val name: String,
-    @field:NotBlank
+    @NotBlank
     val url: String,
-    @field:NotBlank
+    @NotBlank
     val redirectUrl: String,
     val isPublic: Boolean,
-    @field:NotEmpty
+    @NotEmpty
     val frameworks: List<Long>
 ) {
     fun toEntity(dodamId: String) =

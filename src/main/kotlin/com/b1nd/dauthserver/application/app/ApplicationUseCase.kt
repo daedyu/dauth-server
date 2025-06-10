@@ -6,6 +6,7 @@ import com.b1nd.dauthserver.application.app.data.request.UpdateOwnerRequest
 import com.b1nd.dauthserver.application.app.data.response.ApplicationResponse
 import com.b1nd.dauthserver.application.app.data.response.MyApplicationResponse
 import com.b1nd.dauthserver.application.support.response.Response
+import com.b1nd.dauthserver.application.support.response.ResponseData
 import com.b1nd.dauthserver.domain.app.service.ApplicationService
 import com.b1nd.dauthserver.domain.framework.service.FrameworkService
 import com.b1nd.dauthserver.infrastructure.security.support.UserAuthenticationHolder
@@ -23,7 +24,7 @@ class ApplicationUseCase(
         validateOnCreate(request)
         val application = applicationService.save(request.toEntity(user.dodamId))
         applicationService.saveFrameworks(request.toFrameWorks(application.id!!))
-        return Response.ok("앱 등록 성공")
+        return Response.created("앱 등록 성공")
     }
 
     private suspend fun validateOnCreate(request: CreateApplicationRequest) {
@@ -44,15 +45,18 @@ class ApplicationUseCase(
         return Response.ok("소유자 변경 성공")
     }
 
-    suspend fun getAll(): List<ApplicationResponse> =
-        ApplicationResponse.of(applicationService.getAll()).toList()
+    suspend fun getAll(): ResponseData<List<ApplicationResponse>> =
+        ResponseData.ok("어플리케이션 조회 성공", ApplicationResponse.of(applicationService.getAll()).toList())
 
-    suspend fun getMy(): MyApplicationResponse {
+    suspend fun getMy(): ResponseData<MyApplicationResponse> {
         val user = UserAuthenticationHolder.current()
         val applications = applicationService.getByUserId(user.dodamId)
-        return MyApplicationResponse(
-            applicationService.countUser(applications.map { it.application }),
-            ApplicationResponse.ofWithSecret(applications)
+        return ResponseData.ok(
+            "내 어플리케이션 조회 성공",
+            MyApplicationResponse(
+                applicationService.countUser(applications.map { it.application }),
+                ApplicationResponse.ofWithSecret(applications)
+            )
         )
     }
 }

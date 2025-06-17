@@ -6,7 +6,8 @@ enum class ScopeType(val value: String) {
     READ_PROFILE("read:profile"),
     READ_DORMITORY("read:dormitory"),
     WRITE_DORMITORY("write:dormitory"),
-    READ_OUTSLEEP("read:outsleep");
+    READ_OUTSLEEP("read:outsleep"),
+    READ_CLUB("read:club");
 
     companion object {
         fun fromValue(value: String): ScopeType =

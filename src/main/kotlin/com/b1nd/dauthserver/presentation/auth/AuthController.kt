@@ -25,7 +25,7 @@ class AuthController(
     suspend fun login(@Valid @RequestBody request: IdLoginRequest): ResponseData<LoginResponse> =
         useCase.idLogin(request)
 
-    @GetMapping("/qr")
+    @PostMapping("/qr")
     suspend fun createQr(@Valid @RequestBody request: CreateQrRequest): ResponseData<QrLoginResponse> =
         useCase.createQr(request)
 
